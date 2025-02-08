@@ -5,7 +5,9 @@ class Menu extends Phaser.Scene {
     
     preload() {
         //load images
-        this.load.image('faller', './assets/Player-Falling.png');
+        this.load.image('faller', './assets/images/Player-Falling.png');
+        this.load.image('background', './assets/images/Background.png');
+        this.load.image('wall', './assets/images/Wall.png');
     }
 
     create() {
@@ -16,7 +18,8 @@ class Menu extends Phaser.Scene {
 
         //settings
         game.settings = {
-            playerSpeed: 5,
+            playerSpeed: 300,
+            speed: 3,
         }
 
         //start scene
