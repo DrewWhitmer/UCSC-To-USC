@@ -8,6 +8,10 @@ class Menu extends Phaser.Scene {
         this.load.image('faller', './assets/images/Player-Falling.png');
         this.load.image('background', './assets/images/Background.png');
         this.load.image('wall', './assets/images/Wall.png');
+        this.load.spritesheet('bat', './assets/images/Bat-Spritesheet.png', {
+            frameWidth: 64,
+            frameHeight: 64,
+        })
     }
 
     create() {
@@ -19,7 +23,9 @@ class Menu extends Phaser.Scene {
         //settings
         game.settings = {
             playerSpeed: 300,
-            speed: 3,
+            speed: 5,
+            batSpeed: 200,
+            newObst: 300,
         }
 
         //start scene

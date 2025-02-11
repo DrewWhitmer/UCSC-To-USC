@@ -20,8 +20,9 @@ class Play extends Phaser.Scene {
         this.moving = false;
         this.speed = game.settings.playerSpeed;
         this.hasWalls = false;
-        this.createWalls();
+        this.hasBat = false;
         this.num = 0;
+        this.score = 0;
     }
 
     update() {
@@ -44,6 +45,17 @@ class Play extends Phaser.Scene {
         if(this.hasWalls) {
             this.wall1.update();
             this.wall2.update();
+        }
+        if(this.hasBat) {
+            this.bat.update();
+        }
+        this.score++;
+        if(this.score%game.settings.newObst == 0) {
+            if(Phaser.Math.Between(0,1) == 0) {
+                this.createWalls();
+            } else {
+                this.createBat();
+            }
         }
     }
 
@@ -71,8 +83,15 @@ class Play extends Phaser.Scene {
         
     }
 
+    createBat() {
+        this.bat = new Bat(this, game.config.width/2, game.config.height, 'bat', 0);
+        this.physics.add.collider(this.player,this.bat, () => {
+            this.gameOver();
+        })
+        this.hasBat = true;
+    }
+
     gameOver() {
-        game.settings.playerSpeed = 0;
-        game.settings.speed = 0;
+        this.scene.pause();
     }
 }
