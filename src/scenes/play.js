@@ -23,6 +23,7 @@ class Play extends Phaser.Scene {
         this.hasBat = false;
         this.num = 0;
         this.score = 0;
+        this.createBat();
     }
 
     update() {
@@ -93,5 +94,6 @@ class Play extends Phaser.Scene {
 
     gameOver() {
         this.scene.pause();
+        this.scene.launch('gameOverScene', this.score);
     }
 }

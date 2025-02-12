@@ -1,12 +1,14 @@
+'use strict'
+
 let config = {
     type: Phaser.AUTO,
     width: 480,
     height: 640,
-    scene: [ Menu, Play ],
+    scene: [ Menu, Play, GameOver, ],
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true,
+            debug: false,
         }
     },
     backgroundColor: '#FFFFFF',
