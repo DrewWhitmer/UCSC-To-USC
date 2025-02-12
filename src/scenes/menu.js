@@ -17,7 +17,7 @@ class Menu extends Phaser.Scene {
         })
     }
 
-    create() {
+    create(num) {
         //create keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
@@ -30,8 +30,9 @@ class Menu extends Phaser.Scene {
             batSpeed: 200,
             newObst: 300,
         }
+        
 
         //start scene
-        this.scene.start("playScene");
+        this.scene.start("playScene", num);
     }
 }

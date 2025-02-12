@@ -3,7 +3,7 @@ class Play extends Phaser.Scene {
         super("playScene");
     }
 
-    create() {
+    create(num) {
         //create keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
@@ -17,12 +17,22 @@ class Play extends Phaser.Scene {
         this.player.setAngularVelocity(1000);
         this.player.body.setCollideWorldBounds(true)
 
+        //add score
+        this.score = 0;
+        this.scoreText = this.add.text(0, 0, this.score, {
+            fontFamily: 'Georgia',
+            fontSize: 30,
+            color: '#FF0000',
+        })
+        if(typeof num === 'object'){
+            num = 0;
+        }
+        this.highScore = num;
         this.moving = false;
         this.speed = game.settings.playerSpeed;
         this.hasWalls = false;
         this.hasBat = false;
         this.num = 0;
-        this.score = 0;
         this.createBat();
     }
 
@@ -50,6 +60,7 @@ class Play extends Phaser.Scene {
         if(this.hasBat) {
             this.bat.update();
         }
+        this.scoreText.text = this.score;
         this.score++;
         if(this.score%game.settings.newObst == 0) {
             if(Phaser.Math.Between(0,1) == 0) {
@@ -94,6 +105,9 @@ class Play extends Phaser.Scene {
 
     gameOver() {
         this.scene.pause();
-        this.scene.launch('gameOverScene', this.score);
+        this.scene.launch('gameOverScene', {
+            score: this.score,
+            highScore: this.highScore,
+        });
     }
 }

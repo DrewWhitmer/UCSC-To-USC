@@ -3,7 +3,7 @@ class GameOver extends Phaser.Scene {
         super("gameOverScene");
     }
 
-    create(score) {
+    create(obj) {
         game.settings = {
             playerSpeed: 300,
             speed: 5,
@@ -15,15 +15,30 @@ class GameOver extends Phaser.Scene {
         this.menuButton.setInteractive({
             useHandCursor: true,
         })
-        this.menuButton.on('pointerdown', () => {this.scene.start("menuScene")});
+        if(obj.score > obj.highScore) {
+            obj.highScore = obj.score;
+        }
+        this.highScoreText = this.add.text(2*game.config.width/5 + 100, 2*game.config.height/5 + 43, obj.highScore, {
+            fontFamily: 'Georgia',
+            fontSize: 24,
+            color: '#000000',
+        });
+        
+        
+        this.menuButton.on('pointerdown', () => {this.scene.start("menuScene", obj.highScore)});
 
         this.playButton = this.add.sprite(game.config.width/2, game.config.height/2 + 185, 'againButton');
         
         this.playButton.setInteractive({
             useHandCursor: true,
         })
-        this.playButton.on('pointerdown', () => {this.scene.start("playScene")});
-        this.scoreText = this.add.text(2*game.config.width/5 + 40, 2*game.config.height/5 - 10, score);
+        this.playButton.on('pointerdown', () => {this.scene.start("playScene", obj.highScore)});
+        this.scoreText = this.add.text(2*game.config.width/5 + 15, 2*game.config.height/5 - 17, obj.score, {
+            fontFamily: 'Georgia',
+            fontSize: 24,
+            color: '#000000',
+        });
+        
     }
 
 
