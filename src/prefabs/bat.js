@@ -20,10 +20,12 @@ class Bat extends Phaser.Physics.Arcade.Sprite {
 
     update() {
         this.y -= game.settings.speed;
+        //destroy bat if out of bounds
         if(this.y <= -64) {
             this.scene.hasBat = false;
             this.destroy();
         }
+        //if it hits the edge of a screen go the opposite direction
         if(this.x <= 0) {
             this.body.setVelocityX(game.settings.batSpeed);
         }

@@ -27,18 +27,32 @@ class Play extends Phaser.Scene {
         if(typeof num === 'object'){
             num = 0;
         }
+        //create music
+        this.music = this.sound.add('fallMusic');
+        this.music.loop = true;
+        this.music.play();
+
+        //variables
         this.highScore = num;
         this.moving = false;
-        this.speed = game.settings.playerSpeed;
         this.hasWalls = false;
         this.hasBat = false;
         this.num = 0;
-        this.createBat();
+
+        //show players control at start if it is their first time
+        if (this.highScore == 0) {
+            this.leftArrow = this.add.sprite(150, game.config.height/2, 'leftArrow')
+            this.rightArrow = this.add.sprite(game.config.width - 150, game.config.height/2, 'rightArrow');
+            this.clock = this.time.delayedCall(3000, () => {
+                this.leftArrow.destroy();
+                this.rightArrow.destroy();
+            }, null, this);
+        }   
     }
 
     update() {
-        this.moving = false;
         //movement
+        this.moving = false;
         if (keyLEFT.isDown) {
             this.player.body.setVelocityX(-game.settings.playerSpeed);
             this.moving = true;
@@ -60,14 +74,24 @@ class Play extends Phaser.Scene {
         if(this.hasBat) {
             this.bat.update();
         }
+        //scoring + creating obstacles
         this.scoreText.text = this.score;
         this.score++;
-        if(this.score%game.settings.newObst == 0) {
+        if(this.score%game.settings.newObst == 0 && !(this.score%this.game.settings.speedUp == 0)) {
             if(Phaser.Math.Between(0,1) == 0) {
                 this.createWalls();
             } else {
                 this.createBat();
             }
+            this.children.bringToTop(this.scoreText);
+        } else if(this.score%this.game.settings.speedUp == 0) {
+            game.settings.speed++;
+            this.fasterText = this.add.sprite(game.config.width/2, game.config.height/2, 'fasterText');
+            this.clock = this.time.delayedCall(500, () => {this.fasterText.destroy()}, null, this);
+            this.clock = this.time.delayedCall(1000, () => {this.fasterText = this.add.sprite(game.config.width/2, game.config.height/2, 'fasterText')}, null, this);
+            this.clock = this.time.delayedCall(1500, () => {this.fasterText.destroy()}, null, this);
+            this.clock = this.time.delayedCall(2000, () => {this.fasterText = this.add.sprite(game.config.width/2, game.config.height/2, 'fasterText')}, null, this);
+            this.clock = this.time.delayedCall(2500, () => {this.fasterText.destroy()}, null, this);
         }
     }
 
@@ -104,7 +128,9 @@ class Play extends Phaser.Scene {
     }
 
     gameOver() {
+        this.music.stop();
         this.scene.pause();
+        this.sound.play('crash');
         this.scene.launch('gameOverScene', {
             score: this.score,
             highScore: this.highScore,
